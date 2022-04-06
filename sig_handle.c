@@ -1,32 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   sig_handle.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/02/09 15:33:31 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/03/10 20:29:53 by ebhakaz          ###   ########.fr       */
+/*   Created: 2022/03/08 19:53:13 by lmother           #+#    #+#             */
+/*   Updated: 2022/04/05 23:45:51 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int argc, char **argv, char **envp)
+void	handler(int signal)
 {
-	char	*s;
-
-	(void)envp;
-	(void)argc;
-	(void)argv;
-	s = ft_strdup("\\''l\\s -l'\\'a \\ \"libft\\\"\"");
-	printf("before %s\n", s);
-	parser(s);
-	s = ft_strdup("\"\\\"\"||");
-	printf("before %s\n", s);
-	parser(s);
-	s = ft_strdup("'||'a''");
-	printf("before %s\n", s);
-	parser(s);
-	return (0);
+	if (signal == SIGINT)
+	{
+		write(1, "\b\b  \b\b\n", 7);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
 }
