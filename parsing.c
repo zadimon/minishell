@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 14:05:41 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/06 01:20:43 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/08 01:20:48 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,24 +43,31 @@ void	start_parsing(t_parser *parser)
 
 void	check(t_parser *parser)
 {
-	t_cmd	*tmp;
+	t_cmd	*tmp_cmd;
+	t_rd	*tmp_rd;
 	int		i;
 
-	tmp = parser->cmd;
+	tmp_cmd = parser->cmd;
 	printf("\n/*-----*/\n\n");
-	while (tmp != 0)
+	while (tmp_cmd != 0)
 	{
 		i = 0;
 		printf("str->\t\t");
-		while (tmp->str[i])
+		while (tmp_cmd->str[i])
 		{
-			printf(":%s:\t\t", tmp->str[i]);
+			printf(":%s:\t\t", tmp_cmd->str[i]);
 			i++;
 		}
 		printf("\n");
-		printf("infile->\t%s\t\tfd->\t\t%d\n", tmp->infile, tmp->infile_d);
-		printf("outfile->\t%s\t\tfd->\t\t%d\n", tmp->outfile, tmp->outfile_d);
-		tmp = tmp->next;
+		tmp_rd = tmp_cmd->rd;
+		while (tmp_rd != 0)
+		{
+			printf("file name: %s\t\tcase = %d\t\tis_amb: %s\n",tmp_rd->file_name, tmp_rd->which_case, tmp_rd->is_amb);
+			tmp_rd = tmp_rd->next;
+		}
+		// printf("infile->\t%s\t\tfd->\t\t%d\n", tmp->infile, tmp->infile_d);
+		// printf("outfile->\t%s\t\tfd->\t\t%d\n", tmp->outfile, tmp->outfile_d);
+		tmp_cmd = tmp_cmd->next;
 	}
 	printf("\n/*-----*/\n");
 }
@@ -79,7 +86,7 @@ void	parsing(char *s, t_parser *parser)
 		return ;
 	}
 	start_parsing(parser);
-	// check(parser);
+	check(parser);
 	execute_commads(parser);
 	ft_free(parser);
 }

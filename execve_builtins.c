@@ -6,33 +6,33 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/06 00:02:01 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/06 19:23:13 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/07 00:24:33 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	execve_builtins(char **argv, t_env *env_lst, int builtin)
+int	execve_builtins(t_cmd *cmd, t_parser *parser, int builtin)
 {
 	if (builtin == 1)
 	{
-		if (num_of_args(argv) > 1)
-			return (cd(&argv[1], env_lst));
+		if (num_of_args(cmd->str) > 1)
+			return (cd(&cmd->str[1], parser->env));
 		else
-			cd(NULL, env_lst);
+			cd(NULL, parser->env);
 	}
 	else if (builtin == 2)
-		return (pwd(&argv[0]));
+		return (pwd(&cmd->str[0]));
 	else if (builtin == 3)
-		return (echo(argv[1], &argv[1]));
+		return (echo(cmd->str[1], &cmd->str[1]));
 	else if (builtin == 4)
-		return (export(&argv[1], env_lst));
+		return (export(&cmd->str[1], parser->env));
 	else if (builtin == 5)
-		return (unset(&argv[1], env_lst));
+		return (unset(&cmd->str[1], parser->env));
 	else if (builtin == 6)
-		return (env(&argv[1], env_lst));
+		return (env(&cmd->str[1], parser->env));
 	else if (builtin == 7)
-		return (ft_exit(&argv[1], env_lst));
+		return (ft_exit(&cmd->str[1], parser->env));
 	return (1);
 }
 

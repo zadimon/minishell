@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 03:20:17 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/05 23:23:30 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/07 03:28:36 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*get_redirection(t_parser *parser, int start)
 	return (rd);
 }
 
-t_cmd	*check_ambiguous_redirect(t_cmd *this, char *rd)
+t_rd	*check_ambiguous_redirect(t_rd *this, char *rd)
 {
 	int	i;
 	int	j;
@@ -76,6 +76,8 @@ t_cmd	*check_ambiguous_redirect(t_cmd *this, char *rd)
 		}
 		this->is_amb = ft_substr(rd, j, i - j);
 	}
+	else
+		this->is_amb = 0;
 	return (this);
 }
 
