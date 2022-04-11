@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_export.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmother <lmother@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 20:18:22 by lmother           #+#    #+#             */
-/*   Updated: 2022/03/12 16:43:43 by lmother          ###   ########.fr       */
+/*   Updated: 2022/04/08 18:59:23 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	print_export(t_env *env, int size)
+void	print_export(t_env *env, int size)
 {
 	t_env	*tmp;
 	int		i;
@@ -39,7 +39,6 @@ int	print_export(t_env *env, int size)
 		if (!tmp)
 			tmp = env;
 	}
-	return (0);
 }
 
 int	check_argv(char *argv, char c, char *name_bin)
@@ -87,7 +86,8 @@ int	export(char **argv, t_env *env)
 	if (!num_of_args(argv))
 	{
 		sort_export(env, get_size_envp(env));
-		return (print_export(env, get_size_envp(env)));
+		print_export(env, get_size_envp(env));
+		return (0);
 	}
 	else
 	{

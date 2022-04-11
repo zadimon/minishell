@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 00:03:33 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/07 04:54:40 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/11 19:13:59 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,11 @@ t_rd	*make_rd_struct(t_rd *this, char *rd, t_parser *parser)
 		this = get_outfile_d(this, rd, file_name);
 	else
 	{
-		this->file_name = 0;
-		this->is_amb = 0;
+		this->file_name = NULL;
+		this->is_amb = NULL;
 		this->which_case = 0;
 	}
+	this->heredoc_fd = -2;
 	free(rd);
 	free(file_name);
 	return (this);
@@ -75,17 +76,17 @@ t_rd	*add_last_rd(t_rd *this, char *rd, t_parser *parser)
 	tmp = this;
 	if (tmp)
 	{
-		while (tmp->next != 0)
+		while (tmp->next != NULL)
 			tmp = tmp->next;
 		tmp->next = malloc(sizeof(t_rd));
 		tmp->next = make_rd_struct(tmp->next, rd, parser);
-		tmp->next->next = 0;
+		tmp->next->next = NULL;
 	}
 	else
 	{
 		this = malloc(sizeof(t_rd));
 		this = make_rd_struct(this, rd, parser);
-		this->next = 0;
+		this->next = NULL;
 	}
 	return (this);
 }

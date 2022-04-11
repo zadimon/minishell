@@ -4,6 +4,8 @@ LIBFT		= ./libft/libft.a
 
 NAME		= minishell
 
+INC			= ./minishell.h
+
 SRC			= utils_for_parser.c\
 			  put_syntax_error.c\
 			  preparsing.c\
@@ -19,7 +21,7 @@ SRC			= utils_for_parser.c\
 			  utils_for_redirections.c\
 			  put_errors.c\
 			  execute_commands.c\
-			  minishell.c\
+			  main.c\
 			  utils.c\
 			  builtin_cd.c\
 			  builtin_echo.c\
@@ -32,30 +34,35 @@ SRC			= utils_for_parser.c\
 			  sort_export.c\
 			  sig_handle.c\
 			  execve_builtins.c\
-			  get_exit_code.c
+			  get_exit_code.c\
+			  builtin_env2.c\
+			  utils_for_execute.c\
+			  open_files.c\
+			  heredoc.c\
+			  execute_single_cmd.c
 
 OBJ			= $(SRC:.c=.o)
 
 BOBJ		= $(BSRC:.c=.o)
 
-FLAGS		= -Wall -Wextra -Werror -g
+FLAGS		= -Wall -Wextra -Werror -g -include $(INC)
+
+CC			= gcc
 
 RM			= rm -f
 
-%.o:		%.c minishell.h Makefile
-			gcc $(FLAGS) -c $< -o $(<:.c=.o) -I.
+%.o:		%.c $(INC) Makefile
+			$(CC) $(FLAGS) -c $< -o $(<:.c=.o)
 
-all:		$(NAME)
+.PHONY:		all clean fclean re bonus
 
-.FORCE:
+all:		
+			$(MAKE) -C $(LIBFT_DIR) -j 4
+			$(MAKE) $(NAME) -j 4
 
-$(LIBFT):	.FORCE
-			$(MAKE) -C $(LIBFT_DIR)
-
-$(NAME):	$(OBJ) $(LIBFT)
-			gcc -lreadline $(FLAGS) -include minishell.h -o $(NAME)\
-			-lreadline -L /usr/local/Cellar/readline/8.1.2/lib -I /usr/local/Cellar/readline/8.1.2/include\
-			$(OBJ) $(LIBFT)
+$(NAME):	$(OBJ)
+			$(CC) -lreadline $(FLAGS) -o $(NAME) -lreadline -L \
+			~/.brew/Cellar/readline/8.1.2/lib -I ~/.brew/Ceallar/readline/8.1.2/include $(OBJ) $(LIBFT)
 
 clean:
 			$(MAKE) clean -C $(LIBFT_DIR)

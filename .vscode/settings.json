@@ -1,6 +1,5 @@
 {
     "files.associations": {
-        "libft.h": "c",
-        "__config": "cpp"
+        "libft.h": "c"
     }
 }

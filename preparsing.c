@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/02 16:51:38 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/03 17:13:01 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/10 14:52:11 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	check_rd_p(char *s, int *i)
 {
 	if (s[*i] == '|')
-		return (check_double_pipe(s, i));
+		return (check_pipe(s, i));
 	if (s[*i] == '<' || s[*i] == '>')
 		return (check_redirections(s, i));
 	return (0);

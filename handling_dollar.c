@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/15 20:58:45 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/05 23:39:29 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/08 14:34:11 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,26 +75,4 @@ char	*dollar(char *str, int *i, t_parser *parser)
 		return (str);
 	res = put_global_value(str, i, j, parser);
 	return (res);
-}
-
-void	handle_dollar(t_parser *parser, int start)
-{
-	while (parser->s[start] != '\0' && parser->s[start] != '|')
-	{
-		if (parser->s[start] == '\\')
-		{
-			start = start + 2;
-			continue ;
-		}
-		if (parser->s[start] == '\'')
-			skip_sin_quo(parser, &start);
-		if (parser->s[start] == '\"')
-			skip_dou_quo(parser, &start);
-		if (parser->s[start] == '$')
-		{
-			parser->s = dollar(parser->s, &start, parser);
-			continue ;
-		}
-		start++;
-	}
 }

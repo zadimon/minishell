@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 13:59:12 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/04 22:19:31 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/10 14:46:28 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,6 @@ char	**make_str_arr(t_parser *parser, int start)
 	int		k;
 	char	**res;
 
-	handle_dollar(parser, start);
 	size = get_str_arr_size(parser, start);
 	res = malloc(sizeof(char **) * (size + 1));
 	k = 0;
@@ -117,6 +116,6 @@ char	**make_str_arr(t_parser *parser, int start)
 		start = i;
 		k++;
 	}
-	res[k] = 0;
+	res[k] = NULL;
 	return (parse_str_arr(res, size, parser));
 }

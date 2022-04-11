@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/12 18:54:29 by lmother           #+#    #+#             */
-/*   Updated: 2022/04/05 23:01:03 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/08 18:31:27 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,30 +54,38 @@ int	findkey_env(t_env *env, char *key, int edit)
 t_env	*env_lstnew(char *content)
 {
 	t_env	*newlst;
-	char	*spec_sym;
-	char	*tmp;
+	int		i;
 
-	tmp = content;
 	newlst = malloc(sizeof(t_env));
 	if (!newlst)
 		return (NULL);
-	spec_sym = ft_strchr(tmp, '=');
-	if (spec_sym)
+	i = 0;
+	while (content[i] != '=' && content[i] != '\0')
+		i++;
+	if (content[i] == '=')
 	{
-		*spec_sym = '\0';
-		newlst->key = ft_strdup(tmp);
-		newlst->val = ft_strdup(++spec_sym);
+		newlst->key = ft_substr(content, 0, i);
+		newlst->val = ft_strdup(content + i + 1);
 		newlst->next = NULL;
 	}
-	else if (tmp)
+	else
 	{
-		newlst->key = ft_strdup(tmp);
+		newlst->key = ft_strdup(content);
 		newlst->val = NULL;
 		newlst->next = NULL;
 	}
 	return (newlst);
 }
 /*add node to env list from envp*/
+
+static t_env	*add_back(t_env *new, char *str)
+{
+	new = env_lstlast(new);
+	new->next = env_lstnew(str);
+	if (!new->next)
+		return (NULL);
+	return (new);
+}
 
 t_env	*env_to_envlst(char **envp)
 {
@@ -98,12 +106,7 @@ t_env	*env_to_envlst(char **envp)
 				return (NULL);
 		}
 		else
-		{
-			new = env_lstlast(new);
-			new->next = env_lstnew(envp[i]);
-			if (!new->next)
-				return (NULL);
-		}
+			new = add_back(new, envp[i]);
 	}
 	return (head);
 }

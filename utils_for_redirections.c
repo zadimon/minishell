@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 03:20:17 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/07 03:28:36 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/08 19:42:10 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ char	*get_file_name(char *rd, t_parser *parser)
 		}
 		if (file_name[i] == '\\')
 			file_name = away_slash(file_name, &i);
-			i++;
+		i++;
 	}
 	return (file_name);
 }

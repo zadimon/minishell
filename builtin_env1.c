@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_env1.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lmother <lmother@student.42.fr>            +#+  +:+       +#+        */
+/*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/19 17:45:46 by lmother           #+#    #+#             */
-/*   Updated: 2022/03/12 16:43:37 by lmother          ###   ########.fr       */
+/*   Updated: 2022/04/08 18:58:22 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	print_env(t_env *env)
 	while (tmp)
 	{
 		if (tmp->val)
-			printf("%s=\"%s\"\n", tmp->key, tmp->val);
+			printf("%s=%s\n", tmp->key, tmp->val);
 		tmp = tmp->next;
 	}
 	return (0);
