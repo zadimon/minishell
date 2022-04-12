@@ -17,6 +17,7 @@ SRC			= utils_for_parser.c\
 			  make_str_arr.c\
 			  handling_qoutes_and_slash.c\
 			  handling_dollar.c\
+			  parser_for_heredoc.c\
 			  handling_redirections.c\
 			  utils_for_redirections.c\
 			  put_errors.c\
@@ -39,7 +40,8 @@ SRC			= utils_for_parser.c\
 			  utils_for_execute.c\
 			  open_files.c\
 			  heredoc.c\
-			  execute_single_cmd.c
+			  execute_single_cmd.c\
+			  shlvl.c
 
 OBJ			= $(SRC:.c=.o)
 

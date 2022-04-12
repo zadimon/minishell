@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 15:33:50 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/11 21:12:59 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/12 20:28:02 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ typedef struct s_parser
 	pid_t	*pid;
 	int		exit_code;
 	char	**paths;
-	int		fd[2];
-	int		prev_pipe;
+	int		amount;
+	int		**fd;
 }			t_parser;
 
 /*-----make str arr-----*/
@@ -97,12 +97,16 @@ char	**parse_str_arr(char **str_arr, int size, t_parser *parser);
 t_cmd	*make_redirections(t_parser *parser, t_cmd *this, int start);
 t_rd	*add_last_rd(t_rd *this, char *rd, t_parser *parser);
 t_rd	*make_rd_struct(t_rd *this, char *rd, t_parser *parser);
-t_rd	*get_infile_d(t_rd *this, char *rd, char *file_name);
-t_rd	*get_outfile_d(t_rd *this, char *rd, char *file_name);
+t_rd	*get_infile_d(t_rd *this, char *rd, t_parser *parser);
+t_rd	*get_outfile_d(t_rd *this, char *rd, t_parser *parser);
 char	*get_redirection(t_parser *parser, int start);
 int		find_end_of_redirection(t_parser *parser, int t2);
 char	*get_file_name(char *rd, t_parser *parser);
 t_rd	*check_ambiguous_redirect(t_rd *this, char *rd);
+
+/*-----parse for heredoc-----*/
+
+char	*get_limiter(char *rd);
 
 /*-----parsing-----*/
 
@@ -157,6 +161,7 @@ int		choose_builtin(t_cmd *cmd);
 void	get_exit_code(int status, t_parser *parser);
 void	open_files(t_cmd *cmd);
 int		heredoc(t_parser *parser);
+int		ft_close_all_pipes(t_parser *parser, int i);
 
 /*-----execute single command-----*/
 
@@ -166,9 +171,10 @@ int		check_is_single(t_parser *parser);
 /*-----utils for parser-----*/
 
 int		count_cmd(t_cmd *cmd);
-void	close_files(t_cmd *cmd, t_parser *parser);
+void	close_files(t_cmd *cmd);
 void	ft_waitpid(t_parser *parser);
 int		preexecute(t_parser *parser);
+void	shlvl(char	*str, t_env *env);
 
 /*-----utils for builtins-----*/
 

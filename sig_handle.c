@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/08 19:53:13 by lmother           #+#    #+#             */
-/*   Updated: 2022/04/11 16:25:10 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/12 14:46:02 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	int_heredoc(int sig)
 {
-	write(1, "\n", 1);
 	exit(EXIT_FILE_ERROR);
 	(void)sig;
 }
 
 void	empty(int sig)
 {
+	write(1, "\b\n", 2);
 	(void)sig;
 }
 

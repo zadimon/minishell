@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 19:50:15 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/11 20:51:43 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/12 14:08:23 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	child_for_heredoc(t_rd *rd, t_parser *parser, int *fd)
 	pid = fork();
 	if (pid != 0)
 	{
-		signal(SIGINT, SIG_IGN);
+		signal(SIGINT, empty);
 		signal(SIGQUIT, SIG_IGN);
 	}
 	if (pid == 0)
@@ -51,8 +51,7 @@ int	child_for_heredoc(t_rd *rd, t_parser *parser, int *fd)
 		write_in_pipe(rd, fd);
 		exit(EXIT_SUCCESS);
 	}
-	else
-		waitpid(pid, &status, 0);
+	waitpid(pid, &status, 0);
 	get_exit_code(status, parser);
 	if (parser->exit_code == 1)
 		return (1);
@@ -68,8 +67,6 @@ int	start_heredoc(t_cmd *cmd, t_rd *rd, t_parser *parser, int *fd)
 	cmd->infile_d = 0;
 	cmd->infile = ft_strdup(rd->file_name);
 	cmd->is_amb = ft_strdup(rd->is_amb);
-	if (fd[0] > 0)
-		ft_close(fd[0], 0);
 	if (child_for_heredoc(rd, parser, fd))
 	{
 		ft_close(fd[0], NULL);

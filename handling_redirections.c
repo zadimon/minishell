@@ -6,57 +6,69 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 00:03:33 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/11 19:13:59 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/12 00:21:27 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_rd	*get_infile_d(t_rd *this, char *rd, char *file_name)
+t_rd	*get_infile_d(t_rd *this, char *rd, t_parser *parser)
 {
 	if (rd[1] == '<')
 	{
 		this->which_case = HEREDOC_CASE;
-		this->file_name = ft_strdup(file_name);
+		this->file_name = get_limiter(rd);
+		if (this->file_name[0] != '\0')
+		{
+			free(this->is_amb);
+			this->is_amb = 0;
+		}
 	}
 	else
 	{
 		this->which_case = INFILE_CASE;
-		this->file_name = ft_strdup(file_name);
+		this->file_name = get_file_name(rd, parser);
+		if (this->file_name[0] != '\0')
+		{
+			free(this->is_amb);
+			this->is_amb = 0;
+		}
 	}
 	return (this);
 }
 
-t_rd	*get_outfile_d(t_rd *this, char *rd, char *file_name)
+t_rd	*get_outfile_d(t_rd *this, char *rd, t_parser *parser)
 {
 	if (rd[1] == '>')
 	{
 		this->which_case = APPEND_CASE;
-		this->file_name = ft_strdup(file_name);
+		this->file_name = get_file_name(rd, parser);
+		if (this->file_name[0] != '\0')
+		{
+			free(this->is_amb);
+			this->is_amb = 0;
+		}
 	}
 	else
 	{
 		this->which_case = OUTFILE_CASE;
-		this->file_name = ft_strdup(file_name);
+		this->file_name = get_file_name(rd, parser);
+		if (this->file_name[0] != '\0')
+		{
+			free(this->is_amb);
+			this->is_amb = 0;
+		}
 	}
 	return (this);
 }
 
 t_rd	*make_rd_struct(t_rd *this, char *rd, t_parser *parser)
 {
-	char	*file_name;
-
 	this = check_ambiguous_redirect(this, rd);
-	file_name = get_file_name(rd, parser);
-	if (file_name[0] != '\0')
-	{
-		free(this->is_amb);
-		this->is_amb = 0;
-	}
 	if (rd[0] == '<')
-		this = get_infile_d(this, rd, file_name);
+		this = get_infile_d(this, rd, parser);
 	else if (rd[0] == '>')
-		this = get_outfile_d(this, rd, file_name);
+		this = get_outfile_d(this, rd, parser);
 	else
 	{
 		this->file_name = NULL;
@@ -65,7 +77,6 @@ t_rd	*make_rd_struct(t_rd *this, char *rd, t_parser *parser)
 	}
 	this->heredoc_fd = -2;
 	free(rd);
-	free(file_name);
 	return (this);
 }
 

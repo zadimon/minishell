@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:42:51 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/11 19:50:45 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/12 00:36:38 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,10 @@ void	open_files(t_cmd *cmd)
 			|| tmp->which_case == APPEND_CASE)
 			open_outfile(cmd, tmp);
 		if (cmd->infile_d == -1 || cmd->outfile_d == -1)
+		{
 			cmd->error = errno;
+			break ;
+		}
 		tmp = tmp->next;
 	}
 }

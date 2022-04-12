@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/11 14:05:41 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/11 16:35:00 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/12 15:44:14 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	init_parser(char *s, t_parser *parser)
 	parser->s = s;
 	parser->cmd = NULL;
 	parser->paths = NULL;
-	find_paths(parser);
 }
 
 void	start_parsing(t_parser *parser)
