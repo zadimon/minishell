@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:42:51 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/12 00:36:38 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/14 15:47:27 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,19 @@
 
 void	open_infile(t_cmd *cmd, t_rd *rd)
 {
-	if (rd->which_case == INFILE_CASE)
-	{
-		if (cmd->infile_d > 0)
-			ft_close(cmd->infile_d, cmd->infile);
-		free(cmd->infile);
-		free(cmd->is_amb);
-		cmd->infile_d = open(rd->file_name, O_RDONLY);
-		cmd->infile = ft_strdup(rd->file_name);
-		cmd->is_amb = ft_strdup(rd->is_amb);
-	}
-	else if (rd->which_case == HEREDOC_CASE)
-	{
-		if (rd->heredoc_fd > 0)
-		{
-			if (cmd->infile_d > 0)
-				ft_close(cmd->infile_d, cmd->infile);
-			free(cmd->infile);
-			free(cmd->is_amb);
-			cmd->infile_d = rd->heredoc_fd;
-			cmd->infile = ft_strdup(rd->file_name);
-			cmd->is_amb = ft_strdup(rd->is_amb);
-		}
-	}
+	ft_close(cmd->infile_d, cmd->infile);
+	free(cmd->infile);
+	free(cmd->is_amb);
+	cmd->infile_d = open(rd->file_name, O_RDONLY);
+	cmd->infile = ft_strdup(rd->file_name);
+	cmd->is_amb = ft_strdup(rd->is_amb);
 }
 
 void	open_outfile(t_cmd *cmd, t_rd *rd)
 {
 	if (rd->which_case == OUTFILE_CASE)
 	{
-		if (cmd->outfile_d > 0)
-			ft_close(cmd->outfile_d, cmd->outfile);
+		ft_close(cmd->outfile_d, cmd->outfile);
 		free(cmd->outfile);
 		free(cmd->is_amb);
 		cmd->outfile_d = open(rd->file_name,
@@ -54,8 +36,7 @@ void	open_outfile(t_cmd *cmd, t_rd *rd)
 	}
 	else if (rd->which_case == APPEND_CASE)
 	{
-		if (cmd->outfile_d > 0)
-			ft_close(cmd->outfile_d, cmd->outfile);
+		ft_close(cmd->outfile_d, cmd->outfile);
 		free(cmd->outfile);
 		free(cmd->is_amb);
 		cmd->outfile_d = open(rd->file_name,
@@ -65,6 +46,16 @@ void	open_outfile(t_cmd *cmd, t_rd *rd)
 	}
 }
 
+void	heredoc_case(t_cmd *cmd, t_rd *rd)
+{
+	ft_close(cmd->infile_d, cmd->infile);
+	free(cmd->infile);
+	free(cmd->is_amb);
+	cmd->infile_d = cmd->heredoc;
+	cmd->infile = ft_strdup(rd->file_name);
+	cmd->is_amb = ft_strdup(rd->is_amb);
+}
+
 void	open_files(t_cmd *cmd)
 {
 	t_rd	*tmp;
@@ -72,7 +63,7 @@ void	open_files(t_cmd *cmd)
 	tmp = cmd->rd;
 	while (tmp != 0)
 	{
-		if (tmp->which_case == INFILE_CASE || tmp->which_case == HEREDOC_CASE)
+		if (tmp->which_case == INFILE_CASE)
 			open_infile(cmd, tmp);
 		else if (tmp->which_case == OUTFILE_CASE
 			|| tmp->which_case == APPEND_CASE)
@@ -82,6 +73,10 @@ void	open_files(t_cmd *cmd)
 			cmd->error = errno;
 			break ;
 		}
+		if (tmp->next == 0 && tmp->which_case == HEREDOC_CASE)
+			heredoc_case(cmd, tmp);
+		else if (tmp->next == 0 && tmp->which_case != HEREDOC_CASE)
+			ft_close(cmd->heredoc, NULL);
 		tmp = tmp->next;
 	}
 }

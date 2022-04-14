@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/16 12:25:33 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/12 19:16:09 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/14 15:04:24 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,14 +63,4 @@ void	find_paths(t_parser *parser)
 	parser->paths = ft_split(t, ':');
 	add_slash(parser);
 	free(t);
-}
-
-int	ft_close_all_pipes(t_parser *parser, int i)
-{
-	while (i--)
-	{
-		ft_close(parser->fd[i][0], NULL);
-		ft_close(parser->fd[i][1], NULL);
-	}
-	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/02 00:03:33 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/12 00:21:27 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/13 18:55:24 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ t_rd	*make_rd_struct(t_rd *this, char *rd, t_parser *parser)
 		this->is_amb = NULL;
 		this->which_case = 0;
 	}
-	this->heredoc_fd = -2;
 	free(rd);
 	return (this);
 }

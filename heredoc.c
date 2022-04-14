@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 19:50:15 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/12 14:08:23 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/14 15:22:13 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,11 +69,11 @@ int	start_heredoc(t_cmd *cmd, t_rd *rd, t_parser *parser, int *fd)
 	cmd->is_amb = ft_strdup(rd->is_amb);
 	if (child_for_heredoc(rd, parser, fd))
 	{
+		ft_close(fd[1], NULL);
 		ft_close(fd[0], NULL);
 		return (1);
 	}
-	ft_close(fd[1], 0);
-	rd->heredoc_fd = fd[0];
+	ft_close(fd[1], NULL);
 	return (0);
 }
 
@@ -83,7 +83,6 @@ int	heredoc(t_parser *parser)
 	t_rd	*rd_tmp;
 	int		fd[2];
 
-	fd[0] = 0;
 	cmd_tmp = parser->cmd;
 	while (cmd_tmp != 0)
 	{
@@ -91,8 +90,12 @@ int	heredoc(t_parser *parser)
 		while (rd_tmp != 0)
 		{
 			if (rd_tmp->which_case == HEREDOC_CASE)
+			{
+				ft_close(cmd_tmp->heredoc, NULL);
 				if (start_heredoc(cmd_tmp, rd_tmp, parser, fd))
 					return (1);
+				cmd_tmp->heredoc = fd[0];
+			}
 			rd_tmp = rd_tmp->next;
 		}
 		cmd_tmp = cmd_tmp->next;

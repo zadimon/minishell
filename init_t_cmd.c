@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 16:46:53 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/11 20:10:04 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/14 14:44:17 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ t_cmd	*init_file_d(t_cmd *this)
 	this->outfile = NULL;
 	this->is_amb = NULL;
 	this->error = 0;
+	this->heredoc = -2;
 	return (this);
 }
 

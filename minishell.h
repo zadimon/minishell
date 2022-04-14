@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/09 15:33:50 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/12 20:28:02 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/14 15:04:43 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ typedef struct s_rd
 	int			which_case;
 	char		*file_name;
 	char		*is_amb;
-	int			heredoc_fd;
 }				t_rd;
 
 typedef struct s_cmd
@@ -63,6 +62,7 @@ typedef struct s_cmd
 	char			*outfile;
 	char			*is_amb;
 	int				error;
+	int				heredoc;
 }					t_cmd;
 
 typedef struct s_parser
@@ -74,7 +74,9 @@ typedef struct s_parser
 	int		exit_code;
 	char	**paths;
 	int		amount;
-	int		**fd;
+	int		fdd[2];
+	int		dup[2];
+	int		prev;
 }			t_parser;
 
 /*-----make str arr-----*/
@@ -153,8 +155,8 @@ void	put_execve_error(char *cmd, int is_file);
 void	add_slash(t_parser *parser);
 void	find_paths(t_parser *parser);
 void	execute_commads(t_parser *parser);
-void	run_child(t_parser *parser, t_cmd *cmd, int num, int builtin);
-int		change_fd(t_parser *parser, t_cmd *cmd, int num);
+void	run_child(t_parser *parser, t_cmd *cmd, int builtin);
+int		change_fd(t_parser *parser, t_cmd *cmd);
 void	execve_binary_files(t_parser *parser, t_cmd *cmd, char **envp);
 int		execve_builtins(t_cmd *cmd, t_parser *parser, int builtin);
 int		choose_builtin(t_cmd *cmd);

@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 17:34:53 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/12 19:17:14 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/13 18:17:07 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,8 @@ int	count_cmd(t_cmd *cmd)
 
 void	close_files(t_cmd *cmd)
 {
-	if (cmd->infile_d > 0)
-		ft_close(cmd->infile_d, cmd->infile);
-	if (cmd->outfile_d > 0)
-		ft_close(cmd->outfile_d, cmd->outfile);
+	ft_close(cmd->infile_d, cmd->infile);
+	ft_close(cmd->outfile_d, cmd->outfile);
 }
 
 void	ft_waitpid(t_parser *parser)
@@ -60,27 +58,13 @@ void	sig_handle(int pid)
 
 int	preexecute(t_parser *parser)
 {
-	int	i;
-
 	if (heredoc(parser))
 		return (1);
 	if (check_is_single(parser))
 		return (1);
-	parser->amount = count_cmd(parser->cmd);
 	parser->pid = malloc(sizeof(pid_t) * parser->amount);
 	if (!(parser->pid))
 		return (1);
-	parser->fd = malloc(sizeof(int *) * (parser->amount - 1));
-	i = 0;
-	while (i < parser->amount - 1)
-	{
-		parser->fd[i] = malloc(2 * sizeof(int));
-		if (!(parser->fd[i]))
-			return (1);
-		if (pipe(parser->fd[i]) == -1)
-			if (ft_close_all_pipes(parser, i))
-				return (1);
-		i++;
-	}
+	parser->prev = 0;
 	return (0);
 }

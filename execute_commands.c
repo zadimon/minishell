@@ -6,13 +6,13 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/04 00:18:29 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/12 20:29:06 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/13 18:17:49 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	change_fd(t_parser *parser, t_cmd *cmd, int i)
+int	change_fd(t_parser *parser, t_cmd *cmd)
 {
 	if (cmd->infile_d == -1)
 		return (put_open_error(cmd->infile, cmd->is_amb, cmd->error));
@@ -24,13 +24,18 @@ int	change_fd(t_parser *parser, t_cmd *cmd, int i)
 	if (cmd->outfile_d > 0)
 		if (dup2(cmd->outfile_d, STDOUT_FILENO) == -1)
 			return (put_error());
-	if (i > 0 && cmd->infile_d == -2)
-		if (dup2(parser->fd[i - 1][0], STDIN_FILENO) == -1)
+	if (parser->dup[0] && cmd->infile_d == -2)
+		if (dup2(parser->dup[0], STDIN_FILENO) == -1)
 			return (put_error());
-	if (cmd->next != 0 && cmd->outfile_d == -2)
-		if (dup2(parser->fd[i][1], STDOUT_FILENO) == -1)
+	if (parser->dup[1] != 1 && cmd->outfile_d == -2)
+		if (dup2(parser->dup[1], STDOUT_FILENO) == -1)
 			return (put_error());
-	ft_close_all_pipes(parser, parser->amount - 1);
+	if (parser->dup[0] && cmd->infile_d == -2)
+		ft_close(parser->dup[0], NULL);
+	if (parser->dup[1] != 1 && cmd->outfile_d == -2)
+		ft_close(parser->dup[1], NULL);
+	if (cmd->next != 0 || cmd->outfile_d == -2)
+		ft_close(parser->fdd[0], NULL);
 	return (0);
 }
 
@@ -56,12 +61,11 @@ void	execve_binary_files(t_parser *parser, t_cmd *cmd, char **envp)
 		put_execve_error(cmd->str[0], 1);
 }
 
-void	run_child(t_parser *parser, t_cmd *cmd, int i, int builtin)
+void	run_child(t_parser *parser, t_cmd *cmd, int builtin)
 {
 	char	**envp;
 
-	open_files(cmd);
-	if (change_fd(parser, cmd, i) == 1)
+	if (change_fd(parser, cmd) == 1)
 		exit(EXIT_FILE_ERROR);
 	if (cmd->str[0] == 0 || builtin > 4)
 		exit(EXIT_SUCCESS);
@@ -80,13 +84,27 @@ void	execute_one_commad(t_parser *parser, t_cmd *cmd, int i)
 {
 	int	builtin;
 
+	parser->fdd[0] = 0;
+	parser->fdd[1] = 1;
+	parser->dup[0] = 0;
+	parser->dup[1] = 1;
 	builtin = choose_builtin(cmd);
+	if (cmd->next != 0)
+		pipe(parser->fdd);
+	parser->dup[0] = parser->prev;
+	parser->dup[1] = parser->fdd[1];
+	parser->prev = parser->fdd[0];
+	open_files(cmd);
 	parser->pid[i] = fork();
 	sig_handle(parser->pid[i]);
 	if (parser->pid[i] < 0)
 		put_error();
 	if (parser->pid[i] == 0)
-		run_child(parser, cmd, i, builtin);
+		run_child(parser, cmd, builtin);
+	if (parser->dup[0])
+		ft_close(parser->dup[0], NULL);
+	if (parser->dup[1] != 1)
+		ft_close(parser->dup[1], NULL);
 }
 
 void	execute_commads(t_parser *parser)
@@ -96,8 +114,8 @@ void	execute_commads(t_parser *parser)
 
 	if (preexecute(parser))
 		return ;
-	i = 0;
 	cmd = parser->cmd;
+	i = 0;
 	while (cmd != 0)
 	{
 		execute_one_commad(parser, cmd, i);
@@ -105,6 +123,5 @@ void	execute_commads(t_parser *parser)
 		cmd = cmd->next;
 		i++;
 	}
-	ft_close_all_pipes(parser, parser->amount - 1);
 	ft_waitpid(parser);
 }

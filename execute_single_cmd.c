@@ -6,7 +6,7 @@
 /*   By: ebhakaz <ebhakaz@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/11 20:22:31 by ebhakaz           #+#    #+#             */
-/*   Updated: 2022/04/11 20:31:06 by ebhakaz          ###   ########.fr       */
+/*   Updated: 2022/04/13 16:54:58 by ebhakaz          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,8 @@ int	if_change_env(t_parser *parser)
 
 int	check_is_single(t_parser *parser)
 {
-	int		count;
-	t_cmd	*tmp;
-
-	tmp = parser->cmd;
-	count = count_cmd(tmp);
-	if (count == 1)
+	parser->amount = count_cmd(parser->cmd);
+	if (parser->amount == 1)
 		if (if_change_env(parser) == 1)
 			return (1);
 	return (0);
